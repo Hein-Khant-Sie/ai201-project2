@@ -1,0 +1,38 @@
+Professor: Louise Yan
+Source: https://www.ratemyprofessors.com/professor/2262999
+
+Review 1:
+Students describe Professor Yan as knowledgeable and strong at explaining programming concepts, especially C++ and computer science fundamentals.
+
+Review 2:
+Several students say she codes live during lectures instead of only reading from slides. Students who like live coding examples find this helpful for understanding how programs are built.
+
+Review 3:
+Many positive reviews say she explains topics clearly, makes sure students understand concepts, and is willing to answer repeated questions.
+
+Review 4:
+Some students describe her as organized, clear, kind, and one of their favorite professors at BMCC.
+
+Review 5:
+Several students say her courses are fast paced and require students to pay close attention during class.
+
+Review 6:
+Many reviews mention that exams and quizzes are important parts of the grade. Some students describe the class as test-heavy, with quizzes, a midterm, and a final.
+
+Review 7:
+Some students warn that her exams can be difficult, especially because students may need to write full programs or code on paper.
+
+Review 8:
+Several negative reviews say the lecture pace is too fast and that students who fall behind may struggle.
+
+Review 9:
+Students describe mixed experiences with grading. Some say grading is fair and clear, while others mention tough grading or late grading.
+
+Review 10:
+Some reviews mention limited flexibility, such as no retakes, no extra credit, or heavy weight on major exams.
+
+Review 11:
+Positive reviews say she genuinely cares about students and wants them to learn the material rather than just pass.
+
+Review 12:
+Overall, reviews suggest Professor Yan is a strong computer science instructor for students who are prepared to keep up, attend class, study consistently, and actively practice programming.
