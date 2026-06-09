@@ -1,26 +1,11 @@
-"""
-Milestone 3 — Document Ingestion and Chunking
-BMCC Professor Reviews RAG project.
-
-This module:
-  1. Loads all .txt files from documents/
-  2. Cleans the text (whitespace, HTML artifacts, boilerplate, empty lines)
-  3. Splits each document into paragraph-based chunks
-     (target ~800 chars, ~150 char overlap)
-  4. Returns chunks with metadata (source filename + chunk number)
-  5. Prints one cleaned-document preview
-  6. Prints 5 representative chunks
-  7. Prints the total number of chunks
-
-No embeddings, vector store, LLM, or UI yet — those come in later milestones.
-"""
+"""Document ingestion and chunking for the BMCC Professor Reviews RAG project."""
 
 import html
 import json
 import re
 from pathlib import Path
 
-# --- Configuration (from planning.md → Chunking Strategy) -------------------
+# --- Configuration -----------------------------------------------------------
 
 DOCUMENTS_DIR = Path(__file__).parent / "documents"
 CHUNKS_OUTPUT = Path(__file__).parent / "chunks.json"
@@ -28,8 +13,7 @@ CHUNKS_OUTPUT = Path(__file__).parent / "chunks.json"
 TARGET_CHUNK_SIZE = 800   # characters
 CHUNK_OVERLAP = 150       # characters
 
-# Lines that are pure RateMyProfessors UI boilerplate and carry no review
-# content. Matched case-insensitively against whole (stripped) lines.
+# Whole lines (case-insensitive) that are pure RateMyProfessors UI boilerplate.
 BOILERPLATE_LINES = {
     "helpful",
     "not helpful",
@@ -62,13 +46,9 @@ BOILERPLATE_PHRASES = [
 # --- Cleaning ----------------------------------------------------------------
 
 def clean_text(raw: str) -> str:
-    """Normalize a raw document into clean, readable paragraphs.
-
-    Removes HTML tags/entities, collapses runs of whitespace, drops empty and
-    boilerplate lines, and de-duplicates consecutive repeated lines. Paragraph
-    boundaries (blank lines) are preserved so chunking can respect them.
-    """
-    # Decode HTML entities (&amp; &nbsp; &#39; etc.) then strip HTML tags.
+    """Normalize a raw document into clean paragraphs, preserving blank-line
+    paragraph boundaries so chunking can respect them."""
+    # Decode HTML entities then strip HTML tags.
     text = html.unescape(raw)
     text = re.sub(r"<[^>]+>", " ", text)
 
@@ -151,10 +131,9 @@ def chunk_text(text: str, target_size: int = TARGET_CHUNK_SIZE,
                overlap: int = CHUNK_OVERLAP) -> list[str]:
     """Split cleaned text into paragraph-based chunks.
 
-    Paragraphs (blank-line separated) are greedily packed until adding the
-    next would exceed `target_size`. Each new chunk begins with a ~`overlap`
-    char tail of the previous chunk so context near boundaries is preserved.
-    Paragraphs longer than `target_size` on their own are window-split.
+    Paragraphs are greedily packed up to `target_size`; each new chunk begins
+    with an `overlap`-char tail of the previous one. Paragraphs larger than
+    `target_size` are window-split.
     """
     paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
     chunks: list[str] = []
@@ -194,12 +173,8 @@ def load_documents(documents_dir: Path = DOCUMENTS_DIR) -> dict[str, str]:
 
 
 def build_chunks(documents_dir: Path = DOCUMENTS_DIR) -> list[dict]:
-    """Run the full ingest → clean → chunk pipeline.
-
-    Returns a list of chunk records, each:
-        {"text": str, "source": filename, "chunk_number": int}
-    `chunk_number` restarts at 1 within each source document.
-    """
+    """Run the full ingest → clean → chunk pipeline, returning records of
+    {"text", "source", "chunk_number"} (chunk_number restarts per document)."""
     raw_docs = load_documents(documents_dir)
     records = []
     for source, raw in raw_docs.items():
@@ -232,7 +207,7 @@ def main() -> None:
 
     print(f"Loaded {len(raw_docs)} document(s) from {DOCUMENTS_DIR}/\n")
 
-    # 5) One cleaned-document preview.
+    # Cleaned-document preview.
     first_name = next(iter(raw_docs))
     cleaned_preview = clean_text(raw_docs[first_name])
     print("=" * 70)
@@ -248,7 +223,7 @@ def main() -> None:
     save_chunks(records)
     print(f"Saved {len(records)} chunks to {CHUNKS_OUTPUT.name}\n")
 
-    # 6) Five representative chunks, spread evenly across the corpus.
+    # Five representative chunks, spread evenly across the corpus.
     print("=" * 70)
     print("5 REPRESENTATIVE CHUNKS")
     print("=" * 70)
@@ -262,7 +237,7 @@ def main() -> None:
             print(rec["text"])
     print()
 
-    # 7) Total number of chunks.
+    # Total number of chunks.
     print("=" * 70)
     print(f"TOTAL CHUNKS: {len(records)}")
     print("=" * 70)
